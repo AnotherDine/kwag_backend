@@ -28,8 +28,12 @@ jobs:
       with:
         arguments: build
 
+    - name: echo ls
+      run: ls -al
+      shell: bash
+
     - name: Make Zip File
-      run: zip -qq -r ./$FILENAME
+      run: zip -qq -r ./$FILENAME .
       shell: bash
 
     - name: Configure AWS Credentials Action for GitHub Actions
