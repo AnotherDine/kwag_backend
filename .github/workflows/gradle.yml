@@ -6,6 +6,10 @@ on:
 
 env:
   FILENAME: deploy.zip
+  JAR_NAME: back-0.0.1-SNAPSHOT.jar
+  AWS_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+  PROJECT_NAME: ${{ secrets.AWS_CODE_DPLOY_APP_NAME }}
+  DEPLOY_GROUP_NAME: ${{ secrets.AWS_CODE_DPLOY_GROUP_NAME }}
 
 permissions:
   contents: read
@@ -32,7 +36,7 @@ jobs:
         arguments: build
 
     - name: Make Zip File
-      run: zip -qq -r ./${{ env.FILENAME }} .
+      run: zip -qq -j ./$FILENAME ./build/libs/$JAR_NAME
       shell: bash
 
     - name: echo ls
@@ -40,7 +44,7 @@ jobs:
       shell: bash
 
     - name: echo filename
-      run: echo ${{ env.FILENAME }}
+      run: echo $FILENAME
       shell: bash
 
     - name: Configure AWS Credentials Action for GitHub Actions
@@ -51,5 +55,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./${{ env.FILENAME }} s3://${{ secrets.AWS_S3_BUCKET_NAME }}/${{ secrets.AWS_CODE_DPLOY_APP_NAME }}/${{ env.FILENAME }}
-              
+      run: aws s3 cp --region ap-northeast-2 ./$FILENAME s3://$AWS_BUCKET_NAME/$PROJECT_NAME/$FILENAME
+#
+#    - name: Code Deploy
+#      run: aws deploy create-deployment --application-name $PROJECT_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOY_GROUP_NAME --s3-location bucket=$AWS_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$FILENAME
+#
