@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "main" ]
 
+env:
+  FILENAME: deploy.zip
+
 permissions:
   contents: read
 
