@@ -29,7 +29,7 @@ jobs:
         arguments: build
 
     - name: Make Zip File
-      run: zip -qq -r ./$FILENAME .
+      run: zip -qq -r ./${{ env.FILENAME }} .
       shell: bash
 
     - name: echo ls
@@ -37,7 +37,7 @@ jobs:
       shell: bash
 
     - name: echo filename
-      run: echo $FILENAME
+      run: echo ${{ env.FILENAME }}
       shell: bash
 
     - name: Configure AWS Credentials Action for GitHub Actions
@@ -48,5 +48,5 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./$FILENAME s3://${{ secrets.AWS_S3_BUCKET_NAME }}/${{ secrets.AWS_CODE_DPLOY_APP_NAME }}/$FILENAME
+      run: aws s3 cp --region ap-northeast-2 ./${{ env.FILENAME }} s3://${{ secrets.AWS_S3_BUCKET_NAME }}/${{ secrets.AWS_CODE_DPLOY_APP_NAME }}/${{ env.FILENAME }}
               
