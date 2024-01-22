@@ -6,7 +6,6 @@ on:
 
 env:
   FILENAME: deploy.zip
-  JAR_NAME: back-0.0.1-SNAPSHOT.jar
   AWS_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
   PROJECT_NAME: ${{ secrets.AWS_CODE_DPLOY_APP_NAME }}
   DEPLOY_GROUP_NAME: ${{ secrets.AWS_CODE_DPLOY_GROUP_NAME }}
@@ -36,7 +35,7 @@ jobs:
         arguments: build
 
     - name: Make Zip File
-      run: zip -qq -j ./$FILENAME ./build/libs/$JAR_NAME
+      run: zip -qq -r ./$FILENAME .
       shell: bash
 
     - name: echo ls
@@ -56,7 +55,7 @@ jobs:
 
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 ./$FILENAME s3://$AWS_BUCKET_NAME/$PROJECT_NAME/$FILENAME
-#
-#    - name: Code Deploy
-#      run: aws deploy create-deployment --application-name $PROJECT_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOY_GROUP_NAME --s3-location bucket=$AWS_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$FILENAME
-#
+
+    - name: Code Deploy
+      run: aws deploy create-deployment --application-name $PROJECT_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOY_GROUP_NAME --s3-location bucket=$AWS_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$FILENAME
+

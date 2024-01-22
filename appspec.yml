@@ -1,0 +1,23 @@
+version: 0.0 # version은 반드시 0.0이어야 함
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/app
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  AfterInstall:
+    - location: scripts/stop.sh
+      timeout: 60
+      runas: ubuntu
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 60
+      runas: ubuntu
