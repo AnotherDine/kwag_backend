@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfig()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationRequest -> authorizationRequest.anyRequest().permitAll())
